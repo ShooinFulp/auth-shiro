@@ -1,0 +1,17 @@
+package com.fred.authshiro.request.role;
+
+import lombok.Data;
+
+import javax.validation.constraints.NotEmpty;
+
+/**
+ * 〈功能概述〉
+ *
+ * @author: Fred
+ * @date: 2021/3/14 9:56 下午
+ */
+@Data
+public class AddRequest {
+    @NotEmpty(message = "角色名是必须的")
+    private String roleName;
+}

@@ -1,6 +1,9 @@
 package com.fred.authshiro.mapper;
 
 import com.fred.authshiro.model.TbResource;
+import com.fred.authshiro.request.resource.QueryRequest;
+
+import java.util.List;
 
 public interface TbResourceMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,6 @@ public interface TbResourceMapper {
     int updateByPrimaryKeySelective(TbResource record);
 
     int updateByPrimaryKey(TbResource record);
+
+    List<TbResource> select(QueryRequest param);
 }
