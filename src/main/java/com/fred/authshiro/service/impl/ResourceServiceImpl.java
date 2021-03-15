@@ -9,6 +9,7 @@ import com.fred.authshiro.request.resource.QueryRequest;
 import com.fred.authshiro.service.ResourceService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * @author: Fred
  * @date: 2021/3/14 10:31 下午
  */
+@Service
 public class ResourceServiceImpl implements ResourceService {
     @Autowired
     private TbResourceMapper resourceMapper;

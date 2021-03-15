@@ -12,6 +12,7 @@ import com.fred.authshiro.response.base.ResultVo;
 import com.fred.authshiro.service.RoleService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
  * @author: Fred
  * @date: 2021/3/14 9:53 下午
  */
+@Service
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
