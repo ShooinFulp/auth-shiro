@@ -5,6 +5,7 @@ import com.fred.authshiro.model.TbUser;
 import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.request.page.Pagination;
 import com.fred.authshiro.request.role.AddRequest;
+import com.fred.authshiro.request.role.AllocResourceRequest;
 import com.fred.authshiro.request.role.QueryRequest;
 import com.fred.authshiro.request.role.UpdateRequest;
 import com.fred.authshiro.response.base.ResultVo;
@@ -13,6 +14,8 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 〈功能概述〉
@@ -39,7 +42,7 @@ public class RoleController {
     }
 
     @PostMapping("/update")
-    public ResultVo update(UpdateRequest updateRequest) {
+    public ResultVo update(@RequestBody UpdateRequest updateRequest) {
         return roleService.update(updateRequest);
     }
 
@@ -49,7 +52,25 @@ public class RoleController {
     }
 
     @PostMapping("/list")
-    public Pagination<TbUser> list(@RequestBody GenericBo<QueryRequest> bo) {
-        return roleService.list(bo);
+    public ResultVo<Pagination<TbRole>> list(@RequestBody GenericBo<QueryRequest> bo) {
+        return ResultVo.success(roleService.list(bo));
+    }
+
+    @GetMapping("/getRoleListByUserId/{userId}")
+    public ResultVo<List<TbRole>> getRoleListByUserId(@PathVariable("userId") Integer userId) {
+        List<TbRole> roleList = roleService.getRoleListByUserId(userId);
+        return ResultVo.success(roleList);
+    }
+
+    @GetMapping("/getAllRoleList")
+    public ResultVo<List<TbRole>> getAllRoleList() {
+        List<TbRole> list = roleService.getAllRoleList();
+        return ResultVo.success(list);
+    }
+
+    @PostMapping("/allocResource")
+    public ResultVo allocResource(@RequestBody AllocResourceRequest allocResourceRequest) {
+        roleService.allocResource(allocResourceRequest);
+        return ResultVo.success();
     }
 }

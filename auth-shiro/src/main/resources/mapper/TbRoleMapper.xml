@@ -19,10 +19,17 @@
         <include refid="Base_Column_List"/>
         from tb_role
         <where>
-            <if test="name != null and name != ''">
-                name like concat(#{name},'%')
+            <if test="roleName != null and roleName != ''">
+                role_name like concat(#{roleName},'%')
             </if>
         </where>
+    </select>
+    <select id="getRoleListByUserId" resultType="com.fred.authshiro.model.TbRole">
+        select *
+        from tb_role
+        where id in (
+            select role_id from tb_user_role where user_id = #{userId}
+        )
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_role
@@ -35,6 +42,10 @@
             #{id}
         </foreach>
         )
+    </delete>
+    <delete id="removeRoleResourceByRoleId">
+        delete  from tb_role_resource
+        where role_id = #{roleId}
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fred.authshiro.model.TbRole"
             useGeneratedKeys="true">
@@ -54,6 +65,12 @@
                 #{roleName,jdbcType=VARCHAR},
             </if>
         </trim>
+    </insert>
+    <insert id="allocRoleResource">
+        insert into tb_role_resource (role_id,resource_id) values
+        <foreach collection="resourceIds" item="id" separator=",">
+            (#{roleId},#{id})
+        </foreach>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.fred.authshiro.model.TbRole">
         update tb_role

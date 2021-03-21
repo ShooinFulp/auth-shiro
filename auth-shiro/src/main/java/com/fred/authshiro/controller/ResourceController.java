@@ -4,12 +4,12 @@ import com.fred.authshiro.model.TbResource;
 import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.request.page.Pagination;
 import com.fred.authshiro.request.resource.QueryRequest;
+import com.fred.authshiro.response.base.ResultVo;
 import com.fred.authshiro.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 〈功能概述〉
@@ -25,7 +25,12 @@ public class ResourceController {
     private ResourceService resourceService;
 
     @PostMapping("/list")
-    public Pagination<TbResource> list(@RequestBody GenericBo<QueryRequest> bo) {
-        return resourceService.list(bo);
+    public ResultVo<Pagination<TbResource>> list(@RequestBody GenericBo<QueryRequest> bo) {
+        return ResultVo.success(resourceService.list(bo));
+    }
+
+    @GetMapping("/getResourceTree")
+    public ResultVo<List<TbResource>> getResourceTree() {
+        return ResultVo.success(resourceService.getResourceTree());
     }
 }

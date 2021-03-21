@@ -4,6 +4,7 @@ import com.fred.authshiro.model.TbUser;
 import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.request.page.Pagination;
 import com.fred.authshiro.request.user.AddRequest;
+import com.fred.authshiro.request.user.AllocRoleRequest;
 import com.fred.authshiro.request.user.QueryRequest;
 import com.fred.authshiro.request.user.UpdateRequest;
 import com.fred.authshiro.response.user.QueryResponse;
@@ -24,8 +25,8 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public Pagination<QueryResponse> list(@RequestBody GenericBo<QueryRequest> bo) {
-        return userService.list(bo);
+    public ResultVo<Pagination<QueryResponse>> list(@RequestBody GenericBo<QueryRequest> bo) {
+        return ResultVo.success(userService.list(bo));
     }
 
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
@@ -46,5 +47,11 @@ public class UserController {
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     public ResultVo remove(@RequestBody Integer[] ids) {
         return userService.remove(ids);
+    }
+
+    @PostMapping("/allocRole")
+    public ResultVo allocRole(@RequestBody AllocRoleRequest allocRoleRequest) {
+        userService.allocRole(allocRoleRequest);
+        return ResultVo.success();
     }
 }

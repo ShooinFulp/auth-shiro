@@ -6,6 +6,7 @@ import com.fred.authshiro.model.TbRole;
 import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.request.page.Pagination;
 import com.fred.authshiro.request.role.AddRequest;
+import com.fred.authshiro.request.role.AllocResourceRequest;
 import com.fred.authshiro.request.role.QueryRequest;
 import com.fred.authshiro.request.role.UpdateRequest;
 import com.fred.authshiro.response.base.ResultVo;
@@ -13,6 +14,7 @@ import com.fred.authshiro.service.RoleService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class RoleServiceImpl implements RoleService {
     public ResultVo add(AddRequest addRequest) {
         TbRole role = RoleConvert.addRequest2Model(addRequest);
         roleMapper.insert(role);
-        return null;
+        return ResultVo.success();
     }
 
     @Override
@@ -59,5 +61,22 @@ public class RoleServiceImpl implements RoleService {
         PageHelper.startPage(bo.getPage(), bo.getPageSize());
         List<TbRole> list = roleMapper.select(bo.getParam());
         return Pagination.build(list);
+    }
+
+    @Override
+    public List<TbRole> getRoleListByUserId(Integer userId) {
+        return roleMapper.getRoleListByUserId(userId);
+    }
+
+    @Override
+    public List<TbRole> getAllRoleList() {
+        return roleMapper.select(null);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void allocResource(AllocResourceRequest allocResourceRequest) {
+        roleMapper.removeRoleResourceByRoleId(allocResourceRequest.getRoleId());
+        roleMapper.allocRoleResource(allocResourceRequest);
     }
 }

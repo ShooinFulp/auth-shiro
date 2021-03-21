@@ -6,6 +6,7 @@ import com.fred.authshiro.model.TbUser;
 import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.request.page.Pagination;
 import com.fred.authshiro.request.user.AddRequest;
+import com.fred.authshiro.request.user.AllocRoleRequest;
 import com.fred.authshiro.request.user.QueryRequest;
 import com.fred.authshiro.request.user.UpdateRequest;
 import com.fred.authshiro.response.base.ResultVo;
@@ -14,6 +15,7 @@ import com.fred.authshiro.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -58,5 +60,12 @@ public class UserServiceImpl implements UserService {
         TbUser user = UserConvert.updateRequest2Model(updateRequest);
         userMapper.updateByPrimaryKey(user);
         return ResultVo.success();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void allocRole(AllocRoleRequest allocRoleRequest) {
+        userMapper.removeUserRoleByUserId(allocRoleRequest.getUserId());
+        userMapper.allocUserRole(allocRoleRequest);
     }
 }

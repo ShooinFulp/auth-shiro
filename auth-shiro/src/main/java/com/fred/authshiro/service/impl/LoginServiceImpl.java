@@ -16,6 +16,6 @@ import java.util.UUID;
 public class LoginServiceImpl implements LoginService {
     @Override
     public ResultVo<String> doLogin(LoginRequest loginRequest) {
-        return ResultVo.success(UUID.randomUUID());
+        return ResultVo.success("admin-token");
     }
 }

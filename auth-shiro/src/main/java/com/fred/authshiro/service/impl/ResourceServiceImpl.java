@@ -1,6 +1,5 @@
 package com.fred.authshiro.service.impl;
 
-import com.fred.authshiro.converter.ResourceConvert;
 import com.fred.authshiro.mapper.TbResourceMapper;
 import com.fred.authshiro.model.TbResource;
 import com.fred.authshiro.request.page.GenericBo;
@@ -29,5 +28,11 @@ public class ResourceServiceImpl implements ResourceService {
         PageHelper.startPage(bo.getPage(), bo.getPageSize());
         List<TbResource> list = resourceMapper.select(bo.getParam());
         return Pagination.build(list);
+    }
+
+    @Override
+    public List<TbResource> getResourceTree() {
+        // TODO 后期需要改成树结构
+        return resourceMapper.select(null);
     }
 }

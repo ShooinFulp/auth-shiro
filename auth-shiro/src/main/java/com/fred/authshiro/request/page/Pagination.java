@@ -20,7 +20,6 @@ public class Pagination<T> extends PageSize {
     public static <R> Pagination<R> build(List<R> list) {
         Pagination<R> pagination = new Pagination<>();
         if (list instanceof Page) {
-            // TODO 需要检查获取的数据是否正确
             Page<R> page = (Page) list;
             pagination.setRowTotal(page.getTotal());
             pagination.setPageTotal(page.getPages());
