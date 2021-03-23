@@ -68,4 +68,9 @@ public class UserServiceImpl implements UserService {
         userMapper.removeUserRoleByUserId(allocRoleRequest.getUserId());
         userMapper.allocUserRole(allocRoleRequest);
     }
+
+    @Override
+    public TbUser findUserByUsername(String username) {
+        return userMapper.findUserByUsername(username);
+    }
 }

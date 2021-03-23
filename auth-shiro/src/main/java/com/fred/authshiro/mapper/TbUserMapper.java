@@ -27,4 +27,6 @@ public interface TbUserMapper {
     int removeUserRoleByUserId(Integer userId);
 
     int allocUserRole(AllocRoleRequest allocRoleRequest);
+
+    TbUser findUserByUsername(String username);
 }

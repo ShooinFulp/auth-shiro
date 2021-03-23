@@ -29,6 +29,12 @@
             </if>
         </where>
     </select>
+    <select id="findUserByUsername" resultType="com.fred.authshiro.model.TbUser">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_user
+        where username = #{username}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from tb_user
@@ -43,7 +49,8 @@
         )
     </delete>
     <delete id="removeUserRoleByUserId">
-        delete  from tb_user_role
+        delete
+        from tb_user_role
         where user_id = #{userId}
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fred.authshiro.model.TbUser"

@@ -1,5 +1,6 @@
 package com.fred.authshiro.service;
 
+import com.fred.authshiro.model.TbUser;
 import com.fred.authshiro.request.login.LoginRequest;
 import com.fred.authshiro.response.base.ResultVo;
 

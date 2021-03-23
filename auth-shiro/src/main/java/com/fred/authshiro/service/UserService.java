@@ -27,4 +27,6 @@ public interface UserService {
     ResultVo update(UpdateRequest updateRequest);
 
     void allocRole(AllocRoleRequest allocRoleRequest);
+
+    TbUser findUserByUsername(String username);
 }
