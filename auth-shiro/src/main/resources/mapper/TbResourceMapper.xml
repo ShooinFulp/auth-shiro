@@ -7,8 +7,9 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, `path`, `name`
-  </sql>
+        id
+        , `path`, `name`
+    </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -28,15 +29,21 @@
             </if>
         </where>
     </select>
+    <select id="getResourceIdByRoleId" resultType="java.lang.Integer">
+        select resource_id
+        from tb_role_resource
+        where role_id = #{roleId}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from tb_resource
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+        delete
+        from tb_resource
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fred.authshiro.model.TbResource"
             useGeneratedKeys="true">
-    insert into tb_resource (`path`, `name`)
-    values (#{path,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})
-  </insert>
+        insert into tb_resource (`path`, `name`)
+        values (#{path,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})
+    </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.fred.authshiro.model.TbResource"
             useGeneratedKeys="true">
         insert into tb_resource
@@ -70,9 +77,9 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.fred.authshiro.model.TbResource">
-    update tb_resource
-    set `path` = #{path,jdbcType=VARCHAR},
-      `name` = #{name,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        update tb_resource
+        set `path` = #{path,jdbcType=VARCHAR},
+            `name` = #{name,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

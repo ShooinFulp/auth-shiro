@@ -11,7 +11,7 @@ spring:
     username: root
     password: 123456
   redis:
-    url: r-wz9pyx5t1xuxb53oy6pd.redis.rds.aliyuncs.com
+    host: r-wz9pyx5t1xuxb53oy6pd.redis.rds.aliyuncs.com
     port: 6379
     password: $@#+WHKJ@001
     database: 0

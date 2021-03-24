@@ -17,6 +17,10 @@ public class BusinessException extends RuntimeException {
         this.appCode = appCode;
     }
 
+    public AppCode getAppCode() {
+        return this.appCode;
+    }
+
     private static BusinessException of(String message, AppCode appCode) {
         return new BusinessException(message, appCode);
     }

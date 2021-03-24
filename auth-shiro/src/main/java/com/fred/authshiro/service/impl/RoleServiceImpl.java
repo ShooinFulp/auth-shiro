@@ -4,7 +4,7 @@ import com.fred.authshiro.converter.RoleConvert;
 import com.fred.authshiro.mapper.TbRoleMapper;
 import com.fred.authshiro.model.TbRole;
 import com.fred.authshiro.request.page.GenericBo;
-import com.fred.authshiro.request.page.Pagination;
+import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.request.role.AddRequest;
 import com.fred.authshiro.request.role.AllocResourceRequest;
 import com.fred.authshiro.request.role.QueryRequest;

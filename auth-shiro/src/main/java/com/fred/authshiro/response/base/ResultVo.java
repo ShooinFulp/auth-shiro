@@ -1,5 +1,8 @@
 package com.fred.authshiro.response.base;
 
+import com.fred.authshiro.constant.SystemConst;
+import com.fred.authshiro.enums.AppCode;
+import com.fred.authshiro.enums.SystemCode;
 import lombok.Data;
 
 @Data
@@ -10,7 +13,7 @@ public class ResultVo<T> {
      */
     private Boolean status;
 
-    private String code;
+    private Integer code;
 
     private String message;
 
@@ -24,7 +27,7 @@ public class ResultVo<T> {
     public ResultVo() {
         super();
         this.status = true;
-        this.message = "success";
+        this.message = SystemConst.successMessage;
     }
 
     public ResultVo(Boolean status) {
@@ -32,7 +35,7 @@ public class ResultVo<T> {
         this.status = status;
     }
 
-    public ResultVo(Boolean status, String message, String code, T data) {
+    public ResultVo(Boolean status, String message, Integer code, T data) {
         super();
         this.status = status;
         this.message = message;
@@ -45,30 +48,34 @@ public class ResultVo<T> {
     }
 
     public static ResultVo success() {
-        return new ResultVo(true, "", "200", null);
+        return new ResultVo(true, SystemCode.SUCCESSFUL.getMessage(), SystemCode.SUCCESSFUL.getCode(), null);
     }
 
     public static ResultVo success(Object data) {
-        return new ResultVo(true, "", "200", data);
+        return new ResultVo(true, SystemCode.SUCCESSFUL.getMessage(), SystemCode.SUCCESSFUL.getCode(), data);
     }
 
     public static ResultVo success(Object data, String message) {
-        return new ResultVo(true, message, "200", data);
+        return new ResultVo(true, message, SystemCode.SUCCESSFUL.getCode(), data);
     }
 
-    public static ResultVo success(String code, Object data, String message) {
+    public static ResultVo success(Integer code, Object data, String message) {
         return new ResultVo(true, message, code, data);
     }
 
     public static ResultVo error() {
-        return new ResultVo(false, "", "500", null);
+        return new ResultVo(false, SystemCode.SYSTEM_ERROR.getMessage(), SystemCode.SYSTEM_ERROR.getCode(), null);
     }
 
     public static ResultVo error(String message) {
-        return new ResultVo(false, message, "500", null);
+        return new ResultVo(false, message, SystemCode.SYSTEM_ERROR.getCode(), null);
     }
 
-    public static ResultVo error(String code, String message) {
+    public static ResultVo error(AppCode appCode) {
+        return new ResultVo(false, appCode.getMessage(), appCode.getCode(), null);
+    }
+
+    public static ResultVo error(Integer code, String message) {
         return new ResultVo(false, message, code, null);
     }
 

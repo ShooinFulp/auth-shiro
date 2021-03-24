@@ -1,10 +1,12 @@
 package com.fred.authshiro.service.impl;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.fred.authshiro.converter.UserConvert;
 import com.fred.authshiro.mapper.TbUserMapper;
 import com.fred.authshiro.model.TbUser;
 import com.fred.authshiro.request.page.GenericBo;
-import com.fred.authshiro.request.page.Pagination;
+import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.request.user.AddRequest;
 import com.fred.authshiro.request.user.AllocRoleRequest;
 import com.fred.authshiro.request.user.QueryRequest;
@@ -72,5 +74,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public TbUser findUserByUsername(String username) {
         return userMapper.findUserByUsername(username);
+    }
+
+    @Override
+    public JSONObject info() {
+        JSONObject info = JSONUtil.parseObj("{\n" +
+                "    roles: ['admin'],\n" +
+                "    introduction: 'I am a super administrator',\n" +
+                "    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',\n" +
+                "    name: 'Super Admin'\n" +
+                "  }") ;
+        return info;
     }
 }

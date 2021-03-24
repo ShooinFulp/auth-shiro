@@ -2,7 +2,8 @@ package com.fred.authshiro.service;
 
 import com.fred.authshiro.model.TbResource;
 import com.fred.authshiro.request.page.GenericBo;
-import com.fred.authshiro.request.page.Pagination;
+import com.fred.authshiro.response.base.ResultVo;
+import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.request.resource.QueryRequest;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ResourceService {
     Pagination list(GenericBo<QueryRequest> bo);
 
     List<TbResource> getResourceTree();
+
+    List<Integer> getResourceIdByRoleId(Integer roleId);
 }

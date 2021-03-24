@@ -1,5 +1,6 @@
 package com.fred.authshiro.controller;
 
+import com.fred.authshiro.constant.SystemConst;
 import com.fred.authshiro.request.login.LoginRequest;
 import com.fred.authshiro.response.base.ResultVo;
 import com.fred.authshiro.service.LoginService;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2021/3/15 9:48
  */
 @RestController
-@RequestMapping("/login")
+@RequestMapping(SystemConst.LOGIN_PATH_PREFIX)
 public class LoginController {
 
     @Autowired
     private LoginService loginService;
 
-    @PostMapping("/doLogin")
+    @PostMapping(SystemConst.LOGIN_PATH_SUFFIX)
     public ResultVo doLogin(@RequestBody LoginRequest loginRequest) {
         return loginService.doLogin(loginRequest);
     }

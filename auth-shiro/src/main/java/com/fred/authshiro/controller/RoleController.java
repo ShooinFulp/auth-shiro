@@ -1,9 +1,8 @@
 package com.fred.authshiro.controller;
 
 import com.fred.authshiro.model.TbRole;
-import com.fred.authshiro.model.TbUser;
 import com.fred.authshiro.request.page.GenericBo;
-import com.fred.authshiro.request.page.Pagination;
+import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.request.role.AddRequest;
 import com.fred.authshiro.request.role.AllocResourceRequest;
 import com.fred.authshiro.request.role.QueryRequest;

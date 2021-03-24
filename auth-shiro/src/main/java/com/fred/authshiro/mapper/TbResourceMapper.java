@@ -19,4 +19,6 @@ public interface TbResourceMapper {
     int updateByPrimaryKey(TbResource record);
 
     List<TbResource> select(QueryRequest param);
+
+    List<Integer> getResourceIdByRoleId(Integer roleId);
 }

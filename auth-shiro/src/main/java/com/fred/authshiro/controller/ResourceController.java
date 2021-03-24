@@ -2,7 +2,7 @@ package com.fred.authshiro.controller;
 
 import com.fred.authshiro.model.TbResource;
 import com.fred.authshiro.request.page.GenericBo;
-import com.fred.authshiro.request.page.Pagination;
+import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.request.resource.QueryRequest;
 import com.fred.authshiro.response.base.ResultVo;
 import com.fred.authshiro.service.ResourceService;
@@ -32,5 +32,10 @@ public class ResourceController {
     @GetMapping("/getResourceTree")
     public ResultVo<List<TbResource>> getResourceTree() {
         return ResultVo.success(resourceService.getResourceTree());
+    }
+
+    @GetMapping("/getResourceIdByRoleId/{roleId}")
+    public ResultVo<List<Integer>> getResourceIdByRoleId(@PathVariable("roleId") Integer roleId) {
+        return ResultVo.success(resourceService.getResourceIdByRoleId(roleId));
     }
 }

@@ -1,14 +1,18 @@
 package com.fred.authshiro.enums;
 
+import lombok.ToString;
+
 /**
  * @author Fred
  * @date 2021/3/23 21:24
- * @description 10000-20000
+ * @description 20001-30000
  */
-public enum SystemErrorCode implements AppCode<Integer> {
-    USER_NOT_FOUND(10000,"用户不存在!");
+@ToString
+public enum BusinessErrorCode implements AppCode {
+    USER_NOT_FOUND(20001, "用户名或密码错误!"),
+    TOKEN_IS_NULL(20002, "请登录!");
 
-    SystemErrorCode(Integer code, String message) {
+    BusinessErrorCode(Integer code, String message) {
         this.code = code;
         this.message = message;
     }

@@ -1,8 +1,9 @@
 package com.fred.authshiro.service;
 
+import cn.hutool.json.JSONObject;
 import com.fred.authshiro.model.TbUser;
 import com.fred.authshiro.request.page.GenericBo;
-import com.fred.authshiro.request.page.Pagination;
+import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.request.user.AddRequest;
 import com.fred.authshiro.request.user.AllocRoleRequest;
 import com.fred.authshiro.request.user.QueryRequest;
@@ -29,4 +30,6 @@ public interface UserService {
     void allocRole(AllocRoleRequest allocRoleRequest);
 
     TbUser findUserByUsername(String username);
+
+    JSONObject info();
 }

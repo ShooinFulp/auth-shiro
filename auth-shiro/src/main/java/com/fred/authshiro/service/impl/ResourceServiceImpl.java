@@ -3,7 +3,8 @@ package com.fred.authshiro.service.impl;
 import com.fred.authshiro.mapper.TbResourceMapper;
 import com.fred.authshiro.model.TbResource;
 import com.fred.authshiro.request.page.GenericBo;
-import com.fred.authshiro.request.page.Pagination;
+import com.fred.authshiro.response.base.ResultVo;
+import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.request.resource.QueryRequest;
 import com.fred.authshiro.service.ResourceService;
 import com.github.pagehelper.PageHelper;
@@ -34,5 +35,10 @@ public class ResourceServiceImpl implements ResourceService {
     public List<TbResource> getResourceTree() {
         // TODO 后期需要改成树结构
         return resourceMapper.select(null);
+    }
+
+    @Override
+    public List<Integer> getResourceIdByRoleId(Integer roleId) {
+        return resourceMapper.getResourceIdByRoleId(roleId);
     }
 }

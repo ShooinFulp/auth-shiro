@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import requestMock from  '@/utils/request_mock'
+//import requestMock from  '@/utils/request_mock'
 
 export function login(data) {
   return request({
@@ -10,8 +10,8 @@ export function login(data) {
 }
 
 export function getInfo(token) {
-  return requestMock({
-    url: '/vue-admin-template/user/info',
+  return request({
+    url: '/user/info',
     method: 'get',
     params: { token }
   })

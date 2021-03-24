@@ -2,7 +2,7 @@ package com.fred.authshiro.controller;
 
 import com.fred.authshiro.model.TbUser;
 import com.fred.authshiro.request.page.GenericBo;
-import com.fred.authshiro.request.page.Pagination;
+import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.request.user.AddRequest;
 import com.fred.authshiro.request.user.AllocRoleRequest;
 import com.fred.authshiro.request.user.QueryRequest;
@@ -54,4 +54,10 @@ public class UserController {
         userService.allocRole(allocRoleRequest);
         return ResultVo.success();
     }
+
+    @GetMapping("/info")
+    public ResultVo info() {
+        return ResultVo.success(userService.info());
+    }
+
 }

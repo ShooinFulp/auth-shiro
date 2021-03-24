@@ -1,8 +1,7 @@
-package com.fred.authshiro.request.page;
+package com.fred.authshiro.response.page;
 
+import com.fred.authshiro.request.page.PageSize;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageInfo;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;

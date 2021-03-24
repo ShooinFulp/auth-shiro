@@ -14,3 +14,10 @@ export function getResourceTree() {
     method: "get",
   })
 }
+
+export function getResourceIdByRoleId(roleId) {
+  return request({
+    url: '/resource/getResourceIdByRoleId/' + roleId,
+    method: 'get'
+  })
+}
