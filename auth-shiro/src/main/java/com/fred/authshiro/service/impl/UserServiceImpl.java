@@ -3,7 +3,9 @@ package com.fred.authshiro.service.impl;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.fred.authshiro.converter.UserConvert;
+import com.fred.authshiro.mapper.TbMenuMapper;
 import com.fred.authshiro.mapper.TbUserMapper;
+import com.fred.authshiro.model.TbResource;
 import com.fred.authshiro.model.TbUser;
 import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.response.page.Pagination;
@@ -13,12 +15,14 @@ import com.fred.authshiro.request.user.QueryRequest;
 import com.fred.authshiro.request.user.UpdateRequest;
 import com.fred.authshiro.response.base.ResultVo;
 import com.fred.authshiro.response.user.QueryResponse;
+import com.fred.authshiro.response.user.UserInfoResponse;
 import com.fred.authshiro.service.UserService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TbUserMapper userMapper;
+
+    @Autowired
+    private TbMenuMapper menuMapper;
 
     @Override
     public Pagination<QueryResponse> list(GenericBo<QueryRequest> bo) {
@@ -77,13 +84,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JSONObject info() {
-        JSONObject info = JSONUtil.parseObj("{\n" +
-                "    roles: ['admin'],\n" +
-                "    introduction: 'I am a super administrator',\n" +
-                "    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',\n" +
-                "    name: 'Super Admin'\n" +
-                "  }") ;
-        return info;
+    public UserInfoResponse info(Integer userId) {
+        UserInfoResponse userInfo = new UserInfoResponse();
+        userInfo.setMenus(menuMapper.selectUserMenu(userId));
+        userInfo.setRoles(new ArrayList<String>() {{
+            add("admin");
+        }});
+        return userInfo;
     }
 }

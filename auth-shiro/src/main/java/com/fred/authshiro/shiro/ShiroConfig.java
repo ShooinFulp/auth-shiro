@@ -77,7 +77,7 @@ public class ShiroConfig {
 
     @Bean
     public SessionManager sessionManager() {
-        DefaultWebSessionManager manager = new DefaultWebSessionManager();
+        TokenSessionManager manager = new TokenSessionManager();
         manager.setSessionDAO(sessionDAO());
         return manager;
     }

@@ -10,6 +10,7 @@ import com.fred.authshiro.request.user.QueryRequest;
 import com.fred.authshiro.request.user.UpdateRequest;
 import com.fred.authshiro.response.base.ResultVo;
 import com.fred.authshiro.response.user.QueryResponse;
+import com.fred.authshiro.response.user.UserInfoResponse;
 
 
 /**
@@ -31,5 +32,5 @@ public interface UserService {
 
     TbUser findUserByUsername(String username);
 
-    JSONObject info();
+    UserInfoResponse info(Integer userId);
 }

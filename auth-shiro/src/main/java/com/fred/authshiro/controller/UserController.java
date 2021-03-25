@@ -10,6 +10,7 @@ import com.fred.authshiro.request.user.UpdateRequest;
 import com.fred.authshiro.response.user.QueryResponse;
 import com.fred.authshiro.service.UserService;
 import com.fred.authshiro.response.base.ResultVo;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ResultVo<Pagination<QueryResponse>> list(@RequestBody GenericBo<QueryRequest> bo) {
@@ -57,7 +59,8 @@ public class UserController {
 
     @GetMapping("/info")
     public ResultVo info() {
-        return ResultVo.success(userService.info());
+        TbUser user = (TbUser) SecurityUtils.getSubject().getPrincipal();
+        return ResultVo.success(userService.info(user.getId()));
     }
 
 }

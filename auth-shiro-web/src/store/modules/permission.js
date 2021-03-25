@@ -5,12 +5,16 @@ import { asyncRoutes, constantRoutes } from '@/router'
  * @param roles
  * @param route
  */
-function hasPermission(roles, route) {
-  if (route.meta && route.meta.roles) {
-    return roles.some(role => route.meta.roles.includes(role))
-  } else {
-    return true
-  }
+function hasPermission(menus, route) {
+  return menus.some(menu => {
+    console.log("menu"+menu)
+    console.log("rout.path"+route.path)
+   return  route.path.includes(menu.title)})
+  // if (route.path && route.meta.title) {
+  //
+  // } else {
+  //   return true
+  // }
 }
 
 /**
@@ -18,14 +22,18 @@ function hasPermission(roles, route) {
  * @param routes asyncRoutes
  * @param roles
  */
-export function filterAsyncRoutes(routes, roles) {
+export function filterAsyncRoutes(routes, menus) {
   const res = []
 
   routes.forEach(route => {
+    console.log(route)
     const tmp = { ...route }
-    if (hasPermission(roles, tmp)) {
+    console.log(tmp)
+    if (hasPermission(menus, tmp)) {
+      console.log(111)
       if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles)
+        console.log(tmp)
+        tmp.children = filterAsyncRoutes(tmp.children, menus)
       }
       res.push(tmp)
     }
@@ -47,16 +55,19 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({ commit }, roles) {
+  generateRoutes({ commit }, menus) {
     return new Promise(resolve => {
       let accessedRoutes
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+      // if (menus.includes('admin')) {
+      //   accessedRoutes = asyncRoutes || []
+      // } else {
+      //   accessedRoutes = filterAsyncRoutes(asyncRoutes, menus)
+      // }
+      accessedRoutes = filterAsyncRoutes(asyncRoutes, menus)
+      // commit('SET_ROUTES', accessedRoutes)
+      // resolve(accessedRoutes)
+      commit('SET_ROUTES', asyncRoutes)
+      resolve(asyncRoutes)
     })
   }
 }
