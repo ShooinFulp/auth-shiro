@@ -164,7 +164,7 @@ export const asyncRoutes = [
         meta: {title: 'External Link', icon: 'link'}
       }
     ]
-  },  {
+  }, {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
@@ -181,7 +181,15 @@ export const asyncRoutes = [
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/tree/index'),
-        meta: {title: 'Tree', icon: 'tree'}
+        meta: {title: 'Tree', icon: 'tree'},
+        children: [
+          {
+            path: 'table',
+            name: 'Table',
+            component: () => import('@/views/table/index'),
+            meta: {title: 'Table', icon: 'table'}
+          }
+        ]
       }
     ]
   }

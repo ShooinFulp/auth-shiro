@@ -31,7 +31,7 @@
             <el-input
               v-model="listQuery.param.username"
               class="input-width"
-              placeholder="用户名"
+              placeholder="菜单名"
               clearable
             ></el-input>
           </el-form-item>
@@ -64,7 +64,7 @@
             {{ scope.$index }}
           </template>
         </el-table-column>
-        <el-table-column align="center" label="用户名">
+        <el-table-column align="center" label="菜单名">
           <template slot-scope="scope">
   <span>
     {{ scope.row.title }}
@@ -72,17 +72,21 @@
 
           </template>
         </el-table-column>
-        <el-table-column align="center" label="密码" width="110">
+        <el-table-column align="center" label="菜单等级">
+          <template slot-scope="scope">
+  <span>
+    {{ scope.row.level }}
+  </span>
+
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="排序" width="110">
           <template slot-scope="scope">
             <span>{{ scope.row.sort }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="操作" width="180">
           <template slot-scope="scope">
-            <el-button size="mini"
-                       type="text"
-                       @click="handleSelectRole(scope.row)">分配角色
-            </el-button>
             <el-button
               @click="handleUpdate(scope.row)"
               size="mini"
@@ -113,24 +117,49 @@
           :current-page.sync="listQuery.pageNum"
           :page-size="listQuery.pageSize"
           :page-sizes="[10,15,20]"
-          :total="total">
+          :total="total"
+        >
         </el-pagination>
       </div>
 
     </div>
 
     <el-dialog
-      :title="isEdit?'编辑用户':'添加用户'"
+      :title="isEdit?'编辑菜单':'添加菜单'"
       :visible.sync="dialogVisible"
-      width="40%">
-      <el-form :model="user"
+      width="40%"
+    >
+      <el-form :model="menu"
                label-width="150px"
-               ref="adminForm" size="small">
-        <el-form-item label="用户名：">
-          <el-input style="width: 250px" v-model="user.username"></el-input>
+               ref="adminForm" size="small"
+      >
+        <el-form-item label="上级菜单：">
+          <el-select style="width: 250px" v-model="menu.parentId" filterable placeholder="请选择">
+            <el-option
+              v-for="item in parentMenu"
+              :key="item.id"
+              :label="item.title"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="密码：">
-          <el-input style="width: 250px" type="password" v-model="user.password"></el-input>
+        <el-form-item label="菜单名称：">
+          <el-input style="width: 250px" v-model="menu.title"></el-input>
+        </el-form-item>
+        <el-form-item label="菜单排序：">
+          <el-input style="width: 250px" v-model="menu.sort"></el-input>
+        </el-form-item>
+        <el-form-item label="菜单图标：">
+          <el-input style="width: 250px" v-model="menu.icon"></el-input>
+        </el-form-item>
+        <el-form-item label="是否显示：">
+          <el-switch
+            v-model="menu.hidden"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
         </el-form-item>
       </el-form>
       <span class="dialog-footer" slot="footer">
@@ -139,30 +168,11 @@
       </span>
     </el-dialog>
 
-    <el-dialog
-      title="分配角色"
-      :visible.sync="allocDialogVisible"
-      width="30%">
-      <el-select v-model="allocRoleIds" multiple placeholder="请选择" size="small" style="width: 80%">
-        <el-option
-          v-for="item in allRoleList"
-          :key="item.id"
-          :label="item.roleName"
-          :value="item.id">
-        </el-option>
-      </el-select>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="allocDialogVisible = false" size="small">取 消</el-button>
-        <el-button type="primary" @click="handleAllocDialogConfirm()" size="small">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import {allocRole, createUser , removeUser, updateUser} from "@/api/userinfo";
-import {getAllRoleList, getRoleListByUserId} from "@/api/role";
-import {getList} from "@/api/menu";
+import {getList, createMenu, updateMenu, removeMenu, getMenu, getMenuByParentId} from "@/api/menu";
 
 const defaultListQuery = {
   page: 1,
@@ -173,9 +183,7 @@ const defaultListQuery = {
 };
 
 const defaultMenu = {
-  id: null,
-  username: null,
-  password: null,
+  id: null
 };
 
 export default {
@@ -184,10 +192,6 @@ export default {
       list: null,
       listLoading: true,
       dialogVisible: false,
-      allocDialogVisible: false,
-      allocUserId: null,
-      allocRoleIds: [],
-      allRoleList: [],
       total: null,
       listQuery: {
         page: 1,
@@ -196,13 +200,13 @@ export default {
           title: "",
         },
       },
-      user: Object.assign({}, defaultMenu),
+      menu: Object.assign({}, defaultMenu),
       isEdit: false,
+      parentMenu: []
     };
   },
   created() {
     this.getList();
-    this.getAllRoleList();
   },
   methods: {
     getList() {
@@ -214,10 +218,6 @@ export default {
         this.total = response.data.rowTotal;
         this.listLoading = false;
       });
-    }, getAllRoleList() {
-      getAllRoleList().then(response => {
-        this.allRoleList = response.data;
-      })
     },
     handleResetSearch() {
       this.listQuery = Object.assign({}, defaultListQuery);
@@ -229,11 +229,12 @@ export default {
     handleAdd() {
       this.dialogVisible = true;
       this.isEdit = false;
-      this.user = Object.assign({}, defaultUser);
+      this.getMenuByParentId(null);
+      this.menu = Object.assign({}, defaultMenu);
     },
     handleDialogConfirm() {
       if (this.isEdit) {
-        updateUser(this.user).then((response) => {
+        updateMenu(this.menu).then((response) => {
           this.$message({
             message: "修改成功！",
             type: "success",
@@ -242,7 +243,7 @@ export default {
           this.getList();
         });
       } else {
-        createUser(this.user).then((response) => {
+        createMenu(this.menu).then((response) => {
           this.$message({
             message: "添加成功！",
             type: "success",
@@ -255,15 +256,15 @@ export default {
     handleUpdate(row) {
       this.dialogVisible = true;
       this.isEdit = true;
-      this.user = Object.assign({}, row);
+      this.menu = Object.assign({}, row);
     },
     handleDelete(row) {
-      this.$confirm("是否要删除该用户?", "提示", {
+      this.$confirm("是否要删除该菜单?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        removeUser([row.id]).then((response) => {
+        removeMenu([row.id]).then((response) => {
           this.$message({
             type: "success",
             message: "删除成功!",
@@ -279,29 +280,12 @@ export default {
     }, handleCurrentChange(page) {
       this.listQuery.page = page;
       this.getList();
-    }, handleAllocDialogConfirm() {
-      allocRole({userId: this.allocUserId, roleList: this.allocRoleIds}).then(response => {
-        this.$message({
-          type: "success",
-          message: "分配成功!",
-        });
+    },
+    getMenuByParentId(parentId) {
+      getMenuByParentId(parentId).then(response => {
+        this.parentMenu = response.data;
       })
-    }, handleSelectRole(row) {
-      this.allocDialogVisible = true;
-      this.allocUserId = row.id;
-      this.getRoleListByUserId(row.id);
-    },
-    getRoleListByUserId(userId) {
-      getRoleListByUserId(userId).then(response => {
-        let allocRoleList = response.data;
-        this.allocRoleIds = [];
-        if (allocRoleList != null && allocRoleList.length > 0) {
-          for (let i = 0; i < allocRoleList.length; i++) {
-            this.allocRoleIds.push(allocRoleList[i].id);
-          }
-        }
-      });
-    },
+    }
   }
 };
 </script>

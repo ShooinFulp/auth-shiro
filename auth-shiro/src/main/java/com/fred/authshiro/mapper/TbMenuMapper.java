@@ -1,6 +1,7 @@
 package com.fred.authshiro.mapper;
 
 import com.fred.authshiro.model.TbMenu;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,4 +23,5 @@ public interface TbMenuMapper {
     int updateByPrimaryKey(TbMenu record);
 
 
+    int batchDeleteById(@Param("ids") Integer[] ids);
 }

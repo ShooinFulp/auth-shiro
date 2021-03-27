@@ -1,8 +1,11 @@
 package com.fred.authshiro.service.impl;
 
+import com.fred.authshiro.converter.MenuConvert;
 import com.fred.authshiro.mapper.TbMenuMapper;
 import com.fred.authshiro.model.TbMenu;
+import com.fred.authshiro.request.menu.AddRequest;
 import com.fred.authshiro.request.menu.QueryRequest;
+import com.fred.authshiro.request.menu.UpdateRequest;
 import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.service.MenuService;
@@ -40,5 +43,36 @@ public class MenuServiceImpl implements MenuService {
             setTitle(queryRequest.getParam().getTitle());
         }});
         return Pagination.build(list);
+    }
+
+    @Override
+    public void add(AddRequest addRequest) {
+        TbMenu menu = MenuConvert.addRequest2Model(addRequest);
+        menuMapper.insert(menu);
+    }
+
+    @Override
+    public void delete(Integer[] ids) {
+        menuMapper.batchDeleteById(ids);
+    }
+
+    @Override
+    public void update(UpdateRequest updateRequest) {
+        TbMenu menu = MenuConvert.updateRequest2Model(updateRequest);
+        menuMapper.updateByPrimaryKeySelective(menu);
+    }
+
+    @Override
+    public TbMenu get(Integer id) {
+        TbMenu menu = menuMapper.selectByPrimaryKey(id);
+        return menu;
+    }
+
+    @Override
+    public List<TbMenu> getMenuByParentId(Integer parentId) {
+        List<TbMenu> menuList = menuMapper.select(new TbMenu() {{
+            setParentId(parentId);
+        }});
+        return menuList;
     }
 }

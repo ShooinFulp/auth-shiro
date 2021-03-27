@@ -32,12 +32,26 @@
             <if test="title != null and title != ''">
                 title = #{title}
             </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="parentId == null">
+                and parent_id is null
+            </if>
         </where>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from tb_menu
         where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="batchDeleteById">
+        delete
+        from tb_menu
+        where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fred.authshiro.model.TbMenu"
             useGeneratedKeys="true">

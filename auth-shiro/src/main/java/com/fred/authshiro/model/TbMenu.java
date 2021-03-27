@@ -14,7 +14,7 @@ public class TbMenu implements Serializable {
     /**
      * 父级ID
      */
-    private Long parentId;
+    private Integer parentId;
 
     /**
      * 菜单名称

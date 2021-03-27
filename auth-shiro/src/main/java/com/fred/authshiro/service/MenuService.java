@@ -1,7 +1,9 @@
 package com.fred.authshiro.service;
 
 import com.fred.authshiro.model.TbMenu;
+import com.fred.authshiro.request.menu.AddRequest;
 import com.fred.authshiro.request.menu.QueryRequest;
+import com.fred.authshiro.request.menu.UpdateRequest;
 import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.response.page.Pagination;
 
@@ -21,4 +23,14 @@ public interface MenuService {
     List<TbMenu> getUserMenu(Integer userId);
 
     Pagination<TbMenu> list(GenericBo<QueryRequest> queryRequest);
+
+    void add(AddRequest addRequest);
+
+    void delete(Integer[] ids);
+
+    void update(UpdateRequest updateRequest);
+
+    TbMenu get(Integer id);
+
+    List<TbMenu> getMenuByParentId(Integer parentId);
 }
