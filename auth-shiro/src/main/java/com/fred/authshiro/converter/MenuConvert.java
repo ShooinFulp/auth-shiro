@@ -20,6 +20,7 @@ public class MenuConvert {
     public static TbMenu updateRequest2Model(UpdateRequest updateRequest) {
         TbMenu menu = new TbMenu();
         BeanUtils.copyProperties(updateRequest, menu);
+        //menu.setHidden(updateRequest.getHidden());
         return menu;
     }
 }

@@ -5,6 +5,7 @@ import com.fred.authshiro.request.menu.AddRequest;
 import com.fred.authshiro.request.menu.QueryRequest;
 import com.fred.authshiro.request.menu.UpdateRequest;
 import com.fred.authshiro.request.page.GenericBo;
+import com.fred.authshiro.response.menu.QueryMenuResponse;
 import com.fred.authshiro.response.page.Pagination;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface MenuService {
      */
     List<TbMenu> getUserMenu(Integer userId);
 
-    Pagination<TbMenu> list(GenericBo<QueryRequest> queryRequest);
+    Pagination<QueryMenuResponse> list(GenericBo<QueryRequest> queryRequest);
 
     void add(AddRequest addRequest);
 

@@ -1,14 +1,18 @@
-package com.fred.authshiro.model;
+package com.fred.authshiro.response.menu;
 
-import java.io.Serializable;
 import lombok.Data;
 
+import java.util.List;
+import java.util.Objects;
+
 /**
- * tb_menu
- * @author 
+ * 〈功能概述〉
+ *
+ * @author: Fred
+ * @date: 2021/3/29 11:00 下午
  */
 @Data
-public class TbMenu implements Serializable {
+public class QueryMenuResponse {
     private Integer id;
 
     /**
@@ -41,5 +45,9 @@ public class TbMenu implements Serializable {
      */
     private Boolean hidden;
 
-    private static final long serialVersionUID = 1L;
+    private List<QueryMenuResponse> children;
+
+    public boolean hasChildren() {
+        return Objects.nonNull(children) && !children.isEmpty();
+    }
 }

@@ -29,7 +29,7 @@
         >
           <el-form-item label="输入搜索：">
             <el-input
-              v-model="listQuery.param.username"
+              v-model="listQuery.param.title"
               class="input-width"
               placeholder="菜单名"
               clearable
@@ -58,6 +58,9 @@
         border
         fit
         highlight-current-row
+        default-expand-all
+        row-key="id"
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
         <el-table-column align="center" label="ID" width="95">
           <template slot-scope="scope">
@@ -83,6 +86,17 @@
         <el-table-column align="center" label="排序" width="110">
           <template slot-scope="scope">
             <span>{{ scope.row.sort }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="是否显示" width="110">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.hidden"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="handelSwitchChange(scope.row)"
+            >
+            </el-switch>
           </template>
         </el-table-column>
         <el-table-column align="center" label="操作" width="180">
@@ -172,122 +186,126 @@
 </template>
 
 <script>
-import {getList, createMenu, updateMenu, removeMenu, getMenu, getMenuByParentId} from "@/api/menu";
+  import {getList, createMenu, updateMenu, removeMenu, getMenu, getMenuByParentId} from "@/api/menu";
 
-const defaultListQuery = {
-  page: 1,
-  pageSize: 10,
-  param: {
-    title: "",
-  },
-};
+  const defaultListQuery = {
+    page: 1,
+    pageSize: 10,
+    param: {
+      title: "",
+    },
+  };
 
-const defaultMenu = {
-  id: null
-};
+  const defaultMenu = {
+    id: null
+  };
 
-export default {
-  data() {
-    return {
-      list: null,
-      listLoading: true,
-      dialogVisible: false,
-      total: null,
-      listQuery: {
-        page: 1,
-        pageSize: 10,
-        param: {
-          title: "",
+  export default {
+    data() {
+      return {
+        list: null,
+        listLoading: true,
+        dialogVisible: false,
+        total: null,
+        listQuery: {
+          page: 1,
+          pageSize: 10,
+          param: {
+            title: "",
+          },
         },
+        menu: Object.assign({}, defaultMenu),
+        isEdit: false,
+        parentMenu: []
+      };
+    },
+    created() {
+      this.getList();
+    },
+    methods: {
+      getList() {
+        console.log(this.listQuery);
+        this.listLoading = true;
+        console.log(this.listQuery)
+        getList(this.listQuery).then((response) => {
+          this.list = response.data.rows;
+          this.total = response.data.rowTotal;
+          this.listLoading = false;
+        });
       },
-      menu: Object.assign({}, defaultMenu),
-      isEdit: false,
-      parentMenu: []
-    };
-  },
-  created() {
-    this.getList();
-  },
-  methods: {
-    getList() {
-      console.log(this.listQuery);
-      this.listLoading = true;
-      console.log(this.listQuery)
-      getList(this.listQuery).then((response) => {
-        this.list = response.data.rows;
-        this.total = response.data.rowTotal;
-        this.listLoading = false;
-      });
-    },
-    handleResetSearch() {
-      this.listQuery = Object.assign({}, defaultListQuery);
-    },
-    handleSearchList() {
-      this.listQuery.pageNum = 1;
-      this.getList();
-    },
-    handleAdd() {
-      this.dialogVisible = true;
-      this.isEdit = false;
-      this.getMenuByParentId(null);
-      this.menu = Object.assign({}, defaultMenu);
-    },
-    handleDialogConfirm() {
-      if (this.isEdit) {
-        updateMenu(this.menu).then((response) => {
-          this.$message({
-            message: "修改成功！",
-            type: "success",
+      handleResetSearch() {
+        this.listQuery = Object.assign({}, defaultListQuery);
+      },
+      handleSearchList() {
+        this.listQuery.pageNum = 1;
+        this.getList();
+      },
+      handleAdd() {
+        this.dialogVisible = true;
+        this.isEdit = false;
+        this.getMenuByParentId(null);
+        this.menu = Object.assign({}, defaultMenu);
+      },
+      handleDialogConfirm() {
+        if (this.isEdit) {
+          updateMenu(this.menu).then((response) => {
+            this.$message({
+              message: "修改成功！",
+              type: "success",
+            });
+            this.dialogVisible = false;
+            this.getList();
           });
-          this.dialogVisible = false;
-          this.getList();
-        });
-      } else {
-        createMenu(this.menu).then((response) => {
-          this.$message({
-            message: "添加成功！",
-            type: "success",
+        } else {
+          createMenu(this.menu).then((response) => {
+            this.$message({
+              message: "添加成功！",
+              type: "success",
+            });
+            this.dialogVisible = false;
+            this.getList();
           });
-          this.dialogVisible = false;
-          this.getList();
+        }
+      },
+      handleUpdate(row) {
+        this.dialogVisible = true;
+        this.isEdit = true;
+        this.menu = Object.assign({}, row);
+      },
+      handleDelete(row) {
+        this.$confirm("是否要删除该菜单?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }).then(() => {
+          removeMenu([row.id]).then((response) => {
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+            this.getList();
+          });
         });
+      },
+      handleSizeChange(size) {
+        this.listQuery.page = 1;
+        this.listQuery.pageSize = size;
+        this.getList();
+      }, handleCurrentChange(page) {
+        this.listQuery.page = page;
+        this.getList();
+      },
+      getMenuByParentId(parentId) {
+        getMenuByParentId(parentId).then(response => {
+          this.parentMenu = response.data;
+        })
+      }, handelSwitchChange(row) {
+        updateMenu({id: row.id, hidden: row.hidden}).then(response => {
+          this.getList();
+        })
       }
-    },
-    handleUpdate(row) {
-      this.dialogVisible = true;
-      this.isEdit = true;
-      this.menu = Object.assign({}, row);
-    },
-    handleDelete(row) {
-      this.$confirm("是否要删除该菜单?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-        removeMenu([row.id]).then((response) => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-          this.getList();
-        });
-      });
-    },
-    handleSizeChange(size) {
-      this.listQuery.page = 1;
-      this.listQuery.pageSize = size;
-      this.getList();
-    }, handleCurrentChange(page) {
-      this.listQuery.page = page;
-      this.getList();
-    },
-    getMenuByParentId(parentId) {
-      getMenuByParentId(parentId).then(response => {
-        this.parentMenu = response.data;
-      })
     }
-  }
-};
+  };
 </script>
 
 <style scoped>

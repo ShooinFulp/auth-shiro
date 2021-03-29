@@ -35,9 +35,9 @@
             <if test="parentId != null">
                 and parent_id = #{parentId}
             </if>
-            <if test="parentId == null">
-                and parent_id is null
-            </if>
+<!--            <if test="parentId == null">-->
+<!--                and parent_id is null-->
+<!--            </if>-->
         </where>
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
