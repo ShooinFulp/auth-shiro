@@ -151,7 +151,12 @@ export const asyncRoutes = [
         path: 'menu',
         component: () => import('@/views/system-settings/menu/index'),
         meta: {title: '菜单管理'}
-      }
+      }, {
+        path: 'allocMenu',
+        component: () => import('@/views/system-settings/role/allocMenu'),
+        meta: {title: '分配菜单'},
+        hidden: true
+      },
     ]
   },
 

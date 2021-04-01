@@ -46,3 +46,17 @@ export function getMenuByParentId(parentId) {
     params: {parentId}
   })
 }
+
+export function getMenuTree() {
+  return request({
+    url: '/menu/getMenuTree',
+    method: 'get'
+  })
+}
+
+export function getMenuIdByRoleId(roleId) {
+  return request({
+    url: '/menu//getMenuIdByRoleId/' + roleId,
+    method: 'get'
+  })
+}

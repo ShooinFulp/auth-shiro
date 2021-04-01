@@ -252,7 +252,7 @@
       }, handleSelectResource(row) {
         this.$router.push({path: '/system-settings/allocResource', query: {roleId: row.id}})
       },handleSelectMenu(row){
-        alert(11)
+        this.$router.push({path: '/system-settings/allocMenu', query: {roleId: row.id}})
       }
     }
   };

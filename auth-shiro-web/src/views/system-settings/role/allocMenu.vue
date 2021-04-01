@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import {getResourceTree, getResourceIdByRoleId} from '@/api/resource';
-import {allocResource} from '@/api/role';
+import {getMenuTree, getMenuIdByRoleId} from '@/api/menu';
+import {allocMenu} from '@/api/role';
 
 export default {
-  name: "allocResource",
+  name: "allocMenu",
   data() {
     return {
       props: {
@@ -46,10 +46,10 @@ export default {
   },
   methods: {
     initData() {
-      getResourceTree().then(response => {
+      getMenuTree().then(response => {
         this.treeData = response.data;
       })
-      getResourceIdByRoleId(this.roleId).then(response => {
+      getMenuIdByRoleId(this.roleId).then(response => {
         this.checkedKeys = response.data;
       })
     },
@@ -63,7 +63,7 @@ export default {
     }, handleSave() {
       const resourceIds = this.$refs.tree.getCheckedKeys();
       console.log({roleId: this.roleId, resourceIds: resourceIds})
-      allocResource({roleId: this.roleId, resourceIds: resourceIds}).then(response => {
+      allocMenu({roleId: this.roleId, resourceIds: resourceIds}).then(response => {
         this.$message({
           message: "新增成功！",
           type: "success",
