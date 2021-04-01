@@ -1,6 +1,7 @@
 package com.fred.authshiro.mapper;
 
 import com.fred.authshiro.model.TbRole;
+import com.fred.authshiro.request.role.AllocMenuRequest;
 import com.fred.authshiro.request.role.AllocResourceRequest;
 import com.fred.authshiro.request.role.QueryRequest;
 import org.apache.ibatis.annotations.Param;
@@ -29,4 +30,8 @@ public interface TbRoleMapper {
     int removeRoleResourceByRoleId(Integer roleId);
 
     int allocRoleResource(AllocResourceRequest allocResourceRequest);
+
+    int removeRoleMenuByRoleId(Integer roleId);
+
+    int allocUserMenu(AllocMenuRequest allocMenuRequest);
 }

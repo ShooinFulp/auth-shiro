@@ -1,6 +1,5 @@
 package com.fred.authshiro.service.impl;
 
-import cn.hutool.core.util.PageUtil;
 import com.fred.authshiro.converter.MenuConvert;
 import com.fred.authshiro.mapper.TbMenuMapper;
 import com.fred.authshiro.model.TbMenu;
@@ -11,14 +10,10 @@ import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.response.menu.QueryMenuResponse;
 import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.service.MenuService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -52,7 +47,7 @@ public class MenuServiceImpl implements MenuService {
 //        }});
 
         List<TbMenu> allMenu = menuMapper.select(null);
-        List<QueryMenuResponse> treeMenu = getTreeMenu(null, allMenu);
+        List<QueryMenuResponse> treeMenu = getMenuTree(null, allMenu);
 
         Pagination<QueryMenuResponse> pagination = new Pagination<>();
         pagination.setRowTotal(treeMenu.size());
@@ -95,12 +90,23 @@ public class MenuServiceImpl implements MenuService {
         return menuList;
     }
 
-    private List<QueryMenuResponse> getTreeMenu(Integer pid, List<TbMenu> allMenu) {
+    @Override
+    public List<Integer> getMenuIdByRoleId(Integer roleId) {
+        List<Integer> menuIds = menuMapper.getMenuIdByRoleId(roleId);
+        return menuIds;
+    }
+
+    @Override
+    public List<QueryMenuResponse> getMenuTree() {
+        return getMenuTree(null, menuMapper.select(null));
+    }
+
+    private List<QueryMenuResponse> getMenuTree(Integer pid, List<TbMenu> allMenu) {
         return allMenu.stream().filter(m -> Objects.equals(m.getParentId(), pid))
                 .map(m -> {
                     QueryMenuResponse response = new QueryMenuResponse();
                     BeanUtils.copyProperties(m, response);
-                    response.setChildren(getTreeMenu(m.getId(), allMenu));
+                    response.setChildren(getMenuTree(m.getId(), allMenu));
                     return response;
                 })
                 .collect(Collectors.toList());

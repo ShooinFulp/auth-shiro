@@ -6,6 +6,7 @@ import com.fred.authshiro.request.menu.QueryRequest;
 import com.fred.authshiro.request.menu.UpdateRequest;
 import com.fred.authshiro.request.page.GenericBo;
 import com.fred.authshiro.response.base.ResultVo;
+import com.fred.authshiro.response.menu.QueryMenuResponse;
 import com.fred.authshiro.response.page.Pagination;
 import com.fred.authshiro.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,18 @@ public class MenuController {
     }
 
     @GetMapping("/getMenuByParentId")
-    public ResultVo<TbMenu> getMenuByParentId(@RequestParam(value = "parentId",required = false) Integer parentId) {
+    public ResultVo<TbMenu> getMenuByParentId(@RequestParam(value = "parentId", required = false) Integer parentId) {
         List<TbMenu> menuList = menuService.getMenuByParentId(parentId);
-        return  ResultVo.success(menuList);
+        return ResultVo.success(menuList);
+    }
+
+    @GetMapping("/getMenuIdByRoleId/{roleId}")
+    public ResultVo<List<Integer>> getMenuIdByRoleId(@PathVariable("roleId") Integer roleId) {
+        return ResultVo.success(menuService.getMenuIdByRoleId(roleId));
+    }
+
+    @GetMapping("/getMenuTree")
+    public ResultVo<List<QueryMenuResponse>> getMenuTree() {
+        return ResultVo.success(menuService.getMenuTree());
     }
 }

@@ -1,6 +1,7 @@
 package com.fred.authshiro.mapper;
 
 import com.fred.authshiro.model.TbMenu;
+import com.fred.authshiro.request.role.AllocMenuRequest;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,4 +25,7 @@ public interface TbMenuMapper {
 
 
     int batchDeleteById(@Param("ids") Integer[] ids);
+
+
+    List<Integer> getMenuIdByRoleId(Integer roleId);
 }

@@ -1,14 +1,12 @@
 package com.fred.authshiro.service.impl;
 
 import com.fred.authshiro.converter.RoleConvert;
+import com.fred.authshiro.mapper.TbMenuMapper;
 import com.fred.authshiro.mapper.TbRoleMapper;
 import com.fred.authshiro.model.TbRole;
 import com.fred.authshiro.request.page.GenericBo;
+import com.fred.authshiro.request.role.*;
 import com.fred.authshiro.response.page.Pagination;
-import com.fred.authshiro.request.role.AddRequest;
-import com.fred.authshiro.request.role.AllocResourceRequest;
-import com.fred.authshiro.request.role.QueryRequest;
-import com.fred.authshiro.request.role.UpdateRequest;
 import com.fred.authshiro.response.base.ResultVo;
 import com.fred.authshiro.service.RoleService;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +27,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private TbRoleMapper roleMapper;
+
+    @Autowired
+    private TbMenuMapper menuMapper;
 
     @Override
     public ResultVo add(AddRequest addRequest) {
@@ -78,5 +79,12 @@ public class RoleServiceImpl implements RoleService {
     public void allocResource(AllocResourceRequest allocResourceRequest) {
         roleMapper.removeRoleResourceByRoleId(allocResourceRequest.getRoleId());
         roleMapper.allocRoleResource(allocResourceRequest);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void allocMenu(AllocMenuRequest allocMenuRequest) {
+        roleMapper.removeRoleMenuByRoleId(allocMenuRequest.getRoleId());
+        roleMapper.allocUserMenu(allocMenuRequest);
     }
 }

@@ -34,4 +34,8 @@ public interface MenuService {
     TbMenu get(Integer id);
 
     List<TbMenu> getMenuByParentId(Integer parentId);
+
+    List<Integer> getMenuIdByRoleId(Integer roleId);
+
+    List<QueryMenuResponse> getMenuTree();
 }

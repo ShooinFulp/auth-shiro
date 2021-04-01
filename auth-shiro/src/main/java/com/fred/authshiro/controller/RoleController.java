@@ -2,11 +2,8 @@ package com.fred.authshiro.controller;
 
 import com.fred.authshiro.model.TbRole;
 import com.fred.authshiro.request.page.GenericBo;
+import com.fred.authshiro.request.role.*;
 import com.fred.authshiro.response.page.Pagination;
-import com.fred.authshiro.request.role.AddRequest;
-import com.fred.authshiro.request.role.AllocResourceRequest;
-import com.fred.authshiro.request.role.QueryRequest;
-import com.fred.authshiro.request.role.UpdateRequest;
 import com.fred.authshiro.response.base.ResultVo;
 import com.fred.authshiro.service.RoleService;
 import org.hibernate.validator.constraints.Length;
@@ -70,6 +67,13 @@ public class RoleController {
     @PostMapping("/allocResource")
     public ResultVo allocResource(@RequestBody AllocResourceRequest allocResourceRequest) {
         roleService.allocResource(allocResourceRequest);
+        return ResultVo.success();
+    }
+
+
+    @PostMapping("/allocMenu")
+    public ResultVo allocMenu(@RequestBody AllocMenuRequest allocMenuRequest) {
+        roleService.allocMenu(allocMenuRequest);
         return ResultVo.success();
     }
 }

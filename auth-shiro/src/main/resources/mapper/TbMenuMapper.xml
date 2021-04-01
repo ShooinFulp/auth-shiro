@@ -35,10 +35,15 @@
             <if test="parentId != null">
                 and parent_id = #{parentId}
             </if>
-<!--            <if test="parentId == null">-->
-<!--                and parent_id is null-->
-<!--            </if>-->
+            <!--            <if test="parentId == null">-->
+            <!--                and parent_id is null-->
+            <!--            </if>-->
         </where>
+    </select>
+    <select id="getMenuIdByRoleId" resultType="java.lang.Integer">
+        select menu_id
+        from tb_role_menu
+        where role_id = #{roleId}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

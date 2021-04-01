@@ -72,4 +72,10 @@ export function allocResource(data) {
   })
 }
 
-
+export function allocMenu(data) {
+  return request({
+    url: '/role/allocMenu',
+    method: 'post',
+    data
+  })
+}

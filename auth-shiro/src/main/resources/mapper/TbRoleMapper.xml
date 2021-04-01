@@ -6,8 +6,9 @@
         <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, role_name
-  </sql>
+        id
+        , role_name
+    </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -28,13 +29,16 @@
         select *
         from tb_role
         where id in (
-            select role_id from tb_user_role where user_id = #{userId}
+            select role_id
+            from tb_user_role
+            where user_id = #{userId}
         )
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from tb_role
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+        delete
+        from tb_role
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <delete id="deleteByPrimaryKeys">
         delete from tb_role
         where id in(
@@ -44,14 +48,21 @@
         )
     </delete>
     <delete id="removeRoleResourceByRoleId">
-        delete  from tb_role_resource
+        delete
+        from tb_role_resource
         where role_id = #{roleId}
     </delete>
+    <delete id="removeRoleMenuByRoleId">
+        delete
+        from tb_role_menu
+        where role_id = #{roleId}
+    </delete>
+
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fred.authshiro.model.TbRole"
             useGeneratedKeys="true">
-    insert into tb_role (role_name)
-    values (#{roleName,jdbcType=VARCHAR})
-  </insert>
+        insert into tb_role (role_name)
+        values (#{roleName,jdbcType=VARCHAR})
+    </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.fred.authshiro.model.TbRole"
             useGeneratedKeys="true">
         insert into tb_role
@@ -72,6 +83,12 @@
             (#{roleId},#{id})
         </foreach>
     </insert>
+    <insert id="allocUserMenu">
+        insert into tb_role_menu (role_id,menu_id) values
+        <foreach collection="menuIds" item="id" separator=",">
+            (#{roleId},#{id})
+        </foreach>
+    </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.fred.authshiro.model.TbRole">
         update tb_role
         <set>
@@ -82,8 +99,8 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.fred.authshiro.model.TbRole">
-    update tb_role
-    set role_name = #{roleName,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        update tb_role
+        set role_name = #{roleName,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

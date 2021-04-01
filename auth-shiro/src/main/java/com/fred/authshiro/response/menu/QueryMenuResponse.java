@@ -1,5 +1,7 @@
 package com.fred.authshiro.response.menu;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.List;
@@ -47,6 +49,7 @@ public class QueryMenuResponse {
 
     private List<QueryMenuResponse> children;
 
+    @JsonGetter
     public boolean hasChildren() {
         return Objects.nonNull(children) && !children.isEmpty();
     }
